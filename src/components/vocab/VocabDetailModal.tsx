@@ -17,10 +17,8 @@ export default function VocabDetailModal({ word, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className='rounded-2xl p-6 flex flex-col items-center gap-4 relative'
+        className='rounded-2xl p-6 flex flex-col items-center gap-4 relative bg-card-back border border-leaf-border'
         style={{
-          background: '#F8FAF8',
-          border: '1px solid #D8E4D8',
           boxShadow: '0 8px 32px rgba(80,110,85,0.18)',
           width: 'min(320px, calc(100vw - 32px))',
         }}
@@ -28,13 +26,13 @@ export default function VocabDetailModal({ word, onClose }: Props) {
       >
         {/* Top bar: number + close */}
         <div className='flex items-center justify-between w-full'>
-          <span className='text-[11px]' style={{ color: '#B0C0B0' }}>
+          <span className='text-xs text-leaf-note'>
             第 {word.order_idx} 词
           </span>
           <button
             onClick={onClose}
-            className='text-xl leading-none transition-colors'
-            style={{ color: '#C0CAC0' }}
+            className='text-xl leading-none transition-colors text-leaf-faint'
+            style={{}}
             onMouseEnter={(e) => (e.currentTarget.style.color = '#7A9E82')}
             onMouseLeave={(e) => (e.currentTarget.style.color = '#C0CAC0')}
           >
@@ -45,8 +43,7 @@ export default function VocabDetailModal({ word, onClose }: Props) {
         {/* Kana + audio row */}
         <div className='flex items-center gap-3'>
           <span
-            className='text-2xl font-light tracking-wider'
-            style={{ color: '#3A4A3C' }}
+            className='text-2xl font-light tracking-wider text-leaf-text'
           >
             {word.kana}
           </span>
@@ -55,14 +52,13 @@ export default function VocabDetailModal({ word, onClose }: Props) {
 
         {/* Kanji with furigana */}
         {word.kanji ? (
-          <span className='text-xl font-light' style={{ color: '#5A8870' }}>
+          <span className='text-xl font-light text-leaf-deep'>
             {getFurigana(word.kana, word.kanji).map((seg, i) =>
               seg.reading ? (
                 <ruby key={i}>
                   {seg.text}
                   <rt
-                    className='text-xs font-normal'
-                    style={{ color: '#A8B4A8' }}
+                    className='text-xs font-normal text-leaf-muted'
                   >
                     {seg.reading}
                   </rt>
@@ -76,8 +72,7 @@ export default function VocabDetailModal({ word, onClose }: Props) {
 
         {/* Meaning */}
         <p
-          className='text-sm text-center leading-relaxed'
-          style={{ color: '#3A4A3C' }}
+          className='text-sm text-center leading-relaxed text-leaf-text'
         >
           {word.meaning_zh}
         </p>
@@ -85,12 +80,12 @@ export default function VocabDetailModal({ word, onClose }: Props) {
         {/* Meta row: pos + pitch accent */}
         <div className='flex items-center gap-3'>
           {word.pos && word.pos.length > 0 && (
-            <span className='text-[10px]' style={{ color: '#B0C0B0' }}>
+            <span className='text-xs text-leaf-note'>
               {word.pos.join(' · ')}
             </span>
           )}
           {word.pitch_accent !== null && (
-            <span className='text-[10px]' style={{ color: '#B0C0B0' }}>
+            <span className='text-xs text-leaf-note'>
               声调 {word.pitch_accent}
             </span>
           )}
@@ -99,18 +94,17 @@ export default function VocabDetailModal({ word, onClose }: Props) {
         {/* Example sentence */}
         {(word.example_ja || word.example_zh) && (
           <div
-            className='w-full rounded-xl p-3 flex flex-col gap-1'
-            style={{ background: '#EEF4EF' }}
+            className='w-full rounded-xl p-3 flex flex-col gap-1 bg-leaf-bg'
           >
             {word.example_ja && (
               <div className='flex items-start gap-2'>
                 <span
-                  className='text-[10px] leading-relaxed'
-                  style={{ color: '#5A8870', whiteSpace: 'nowrap' }}
+                  className='text-xs leading-relaxed text-leaf-deep'
+                  style={{ whiteSpace: 'nowrap' }}
                 >
                   例文
                 </span>
-                <span className='text-xs leading-relaxed' style={{ color: '#3A4A3C' }}>
+                <span className='text-xs leading-relaxed text-leaf-text'>
                   {word.example_ja}
                 </span>
                 {word.audio_example_url && (
@@ -125,12 +119,12 @@ export default function VocabDetailModal({ word, onClose }: Props) {
             {word.example_zh && (
               <div className='flex items-start gap-2'>
                 <span
-                  className='text-[10px] leading-relaxed'
-                  style={{ color: '#9AAA9A', whiteSpace: 'nowrap' }}
+                  className='text-xs leading-relaxed text-[#9AAA9A]'
+                  style={{ whiteSpace: 'nowrap' }}
                 >
                   释义
                 </span>
-                <span className='text-xs leading-relaxed' style={{ color: '#7A8A7A' }}>
+                <span className='text-xs leading-relaxed text-[#7A8A7A]'>
                   {word.example_zh}
                 </span>
               </div>
@@ -141,8 +135,7 @@ export default function VocabDetailModal({ word, onClose }: Props) {
         {/* Notes */}
         {word.notes && (
           <p
-            className='text-[10px] text-center leading-relaxed'
-            style={{ color: '#9AAA9A' }}
+            className='text-xs text-center leading-relaxed text-[#9AAA9A]'
           >
             {word.notes}
           </p>
@@ -151,8 +144,8 @@ export default function VocabDetailModal({ word, onClose }: Props) {
         {/* Close */}
         <button
           onClick={onClose}
-          className='text-xs transition-colors'
-          style={{ color: '#C0CAC0' }}
+          className='text-xs transition-colors text-leaf-faint'
+          style={{}}
           onMouseEnter={(e) => (e.currentTarget.style.color = '#7A9E82')}
           onMouseLeave={(e) => (e.currentTarget.style.color = '#C0CAC0')}
         >

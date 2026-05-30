@@ -31,18 +31,14 @@ export default function VocabPreview({ words }: Props) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder='搜索假名、汉字或释义…'
-        className='w-full px-3 py-2 rounded-xl text-xs outline-none transition-colors'
-        style={{
-          background: '#FEFCF8',
-          border: '1px solid #D8E4D8',
-          color: '#3A4A3C',
-        }}
+        className='w-full px-3 py-2 rounded-xl text-xs outline-none transition-colors bg-card text-leaf-text border border-leaf-border'
+        style={{}}
         onFocus={(e) => (e.currentTarget.style.borderColor = '#7A9E82')}
         onBlur={(e) => (e.currentTarget.style.borderColor = '#D8E4D8')}
       />
 
       {filtered.length === 0 && (
-        <p className='text-xs text-center' style={{ color: '#C0CAC0' }}>
+        <p className='text-xs text-center text-leaf-faint'>
           没有匹配的单词
         </p>
       )}
@@ -53,26 +49,20 @@ export default function VocabPreview({ words }: Props) {
           <div
             key={w.id}
             onClick={() => setDetailWord(w)}
-            className='flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-left transition-colors'
-            style={{
-              background: '#FEFCF8',
-              border: '1px solid #E4EAE4',
-            }}
+            className='flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-left transition-colors bg-card border border-leaf-border2'
             onMouseEnter={(e) => (e.currentTarget.style.background = '#EEF4EF')}
             onMouseLeave={(e) => (e.currentTarget.style.background = '#FEFCF8')}
           >
             {/* Index */}
             <span
-              className='text-[10px] w-5 text-center shrink-0'
-              style={{ color: '#C0CAC0' }}
+              className='text-xs w-5 text-center shrink-0 text-leaf-faint'
             >
               {w.order_idx}
             </span>
 
             {/* Kana */}
             <span
-              className='text-xs shrink-0 min-w-[60px]'
-              style={{ color: '#8A9A8A' }}
+              className='text-xs shrink-0 min-w-[60px] text-leaf-gray'
             >
               {w.kana}
             </span>
@@ -85,8 +75,7 @@ export default function VocabPreview({ words }: Props) {
                     <ruby key={i}>
                       {seg.text}
                       <rt
-                        className='text-[9px] font-normal'
-                        style={{ color: '#A8B4A8' }}
+                        className='text-[9px] font-normal text-leaf-muted'
                       >
                         {seg.reading}
                       </rt>
@@ -98,8 +87,7 @@ export default function VocabPreview({ words }: Props) {
               </span>
             ) : (
               <span
-                className='text-sm font-light shrink-0 min-w-[60px]'
-                style={{ color: '#3A4A3C' }}
+                className='text-sm font-light shrink-0 min-w-[60px] text-leaf-text'
               >
                 {w.kana}
               </span>
@@ -107,8 +95,7 @@ export default function VocabPreview({ words }: Props) {
 
             {/* Meaning */}
             <span
-              className='text-xs flex-1 truncate'
-              style={{ color: '#3A4A3C' }}
+              className='text-xs flex-1 truncate text-leaf-text'
             >
               {w.meaning_zh}
             </span>
@@ -116,8 +103,7 @@ export default function VocabPreview({ words }: Props) {
             {/* Pitch accent */}
             {w.pitch_accent !== null && (
               <span
-                className='text-[10px] shrink-0'
-                style={{ color: '#B0C0B0' }}
+                className='text-xs shrink-0 text-leaf-note'
               >
                 ①{w.pitch_accent}
               </span>
@@ -135,7 +121,7 @@ export default function VocabPreview({ words }: Props) {
         ))}
       </div>
 
-      <p className='text-[10px] text-right' style={{ color: '#C0CAC0' }}>
+      <p className='text-xs text-right text-leaf-faint'>
         共 {filtered.length} 词
       </p>
 
