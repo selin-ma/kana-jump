@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import VocabPreview from './vocab/Preview'
 import { useAuth } from '../hooks/useAuth/useAuth'
 import { useBooks } from '../hooks/useBooks/useBooks'
 import { useChapters } from '../hooks/useChapters/useChapters'
@@ -90,6 +91,7 @@ export default function VocabApp() {
   const [draft, setDraft] = useState<VocabSessionDraft | null>(null)
   const [pendingResume, setPendingResume] = useState(false)
   const [viewMode, setViewMode] = useState<'practice' | 'history'>('practice')
+  const [showPreview, setShowPreview] = useState(false)
 
   const { books, loading: booksLoading, error: booksError } = useBooks()
   const { chapters, loading: chaptersLoading, error: chaptersError } = useChapters(bookId)
@@ -494,6 +496,28 @@ export default function VocabApp() {
         </span>
         &nbsp;个词条
       </p>
+
+      {/* Preview toggle */}
+      <button
+        onClick={() => setShowPreview((p) => !p)}
+        className='flex items-center gap-1.5 text-xs transition-colors'
+        style={{ color: '#7A9E82' }}
+      >
+        {showPreview ? '收起词表' : '浏览词表'}
+        <span
+          className={`inline-block transition-transform duration-200 ${
+            showPreview ? 'rotate-180' : ''
+          }`}
+        >
+          ▼
+        </span>
+      </button>
+
+      {showPreview && (
+        <div className='w-full'>
+          <VocabPreview words={words} />
+        </div>
+      )}
 
       {/* Count picker */}
       <div className='flex flex-col items-center gap-1.5'>
