@@ -107,7 +107,7 @@ export default function VocabCard({ word, answered, onRate, onSkip }: Props) {
             {word.pos && word.pos.length > 0 && (
               <div className='flex items-center gap-2 self-end'>
                 {word.pos.map((p) => (
-                  <span key={p} className='text-[10px]' style={{ color: '#B0C0B0' }}>
+                  <span key={p} className='text-xs' style={{ color: '#B0C0B0' }}>
                     {p}
                   </span>
                 ))}
@@ -150,7 +150,7 @@ export default function VocabCard({ word, answered, onRate, onSkip }: Props) {
 
             {word.notes && (
               <p
-                className='text-[10px] text-center leading-relaxed'
+                className='text-xs text-center leading-relaxed'
                 style={{ color: '#9AAA9A' }}
               >
                 {word.notes}

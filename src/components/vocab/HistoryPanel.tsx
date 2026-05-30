@@ -122,7 +122,7 @@ export default function VocabHistoryPanel({
                   {r.mode === 'due_review' ? '算法推荐复习' : (r.book_title ?? '—')}
                   {incomplete && (
                     <span
-                      className='ml-2 px-1.5 py-0.5 rounded text-[10px]'
+                      className='ml-2 px-1.5 py-0.5 rounded text-xs'
                       style={{
                         background: '#F5F0E4',
                         color: '#A89060',
@@ -134,7 +134,7 @@ export default function VocabHistoryPanel({
                 </span>
                 <span style={{ color: '#7A9E82' }}>{knownRate}%</span>
               </div>
-              <div className='flex items-center gap-2 text-[11px] pt-0.5'>
+              <div className='flex items-center gap-2 text-xs pt-0.5'>
                 <span style={{ color: '#AA6868' }}>✗{r.again_count}</span>
                 <span style={{ color: '#A89060' }}>~{r.hard_count}</span>
                 <span style={{ color: '#4A7A50' }}>✓{r.good_count}</span>
