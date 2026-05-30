@@ -50,10 +50,10 @@ export default function VocabPreview({ words }: Props) {
       {/* Word rows */}
       <div className='flex flex-col gap-1.5 max-h-[420px] overflow-y-auto'>
         {filtered.map((w) => (
-          <button
+          <div
             key={w.id}
             onClick={() => setDetailWord(w)}
-            className='flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors'
+            className='flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-left transition-colors'
             style={{
               background: '#FEFCF8',
               border: '1px solid #E4EAE4',
@@ -131,7 +131,7 @@ export default function VocabPreview({ words }: Props) {
                 size='sm'
               />
             </div>
-          </button>
+          </div>
         ))}
       </div>
 
