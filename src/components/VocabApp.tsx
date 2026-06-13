@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth/useAuth'
 import { useBooks } from '../hooks/useBooks/useBooks'
 import { useChapters } from '../hooks/useChapters/useChapters'
 import { useWords } from '../hooks/useWords/useWords'
+import { useBookWords } from '../hooks/useBookWords/useBookWords'
 import { useVocabHistory } from '../hooks/useVocabHistory/useVocabHistory'
 import { useVocabSession } from '../hooks/useVocabSession/useVocabSession'
 import { saveVocabSessionBatch } from '../services/vocabProgress'
@@ -18,6 +19,7 @@ import {
 } from '../utils/vocabSessionDraft/vocabSessionDraft'
 import type { VocabSessionDraft } from '../utils/vocabSessionDraft/vocabSessionDraft'
 import BookList from './vocab/BookList'
+import BookBrowser from './vocab/BookBrowser'
 import ChapterList from './vocab/ChapterList'
 import VocabCardStack from './vocab/CardStack'
 import VocabHistoryPanel from './vocab/HistoryPanel'
@@ -92,10 +94,16 @@ export default function VocabApp() {
   const [pendingResume, setPendingResume] = useState(false)
   const [viewMode, setViewMode] = useState<'practice' | 'history'>('practice')
   const [showPreview, setShowPreview] = useState(false)
+  const [browsing, setBrowsing] = useState(false)
 
   const { books, loading: booksLoading, error: booksError } = useBooks()
   const { chapters, loading: chaptersLoading, error: chaptersError } = useChapters(bookId)
   const { words, loading: wordsLoading, error: wordsError } = useWords(chapterId)
+  const {
+    words: bookWords,
+    loading: bookWordsLoading,
+    error: bookWordsError,
+  } = useBookWords(browsing ? bookId : null)
   const history = useVocabHistory(viewMode === 'history')
 
   const book = useMemo(() => books.find((b) => b.id === bookId) ?? null, [books, bookId])
@@ -441,17 +449,75 @@ export default function VocabApp() {
     )
   }
 
-  // Chapter picker
+  // Chapter picker + book browser (tab layout)
   if (!chapter) {
     return (
-      <ChapterList
-        chapters={chapters}
-        loading={chaptersLoading}
-        error={chaptersError}
-        bookTitle={book.title}
-        onBack={() => setBookId(null)}
-        onPick={(c) => setChapterId(c.id)}
-      />
+      <div className='flex flex-col gap-4 w-full max-w-sm'>
+        {/* Shared header */}
+        <div className='flex items-center justify-between'>
+          <button
+            onClick={() => {
+              setBookId(null)
+              setBrowsing(false)
+            }}
+            className='text-xs transition-colors'
+            style={{ color: '#7A9E82' }}
+          >
+            ← 书架
+          </button>
+          <span className='text-sm font-medium' style={{ color: '#3A4A3C' }}>
+            {book.title}
+          </span>
+        </div>
+
+        {/* Tabs */}
+        <div className='flex p-1 rounded-xl' style={{ background: '#E8EEE8' }}>
+          {(['chapters', 'all'] as const).map((tab) => {
+            const active = browsing ? tab === 'all' : tab === 'chapters'
+            const label = tab === 'chapters' ? '章节列表' : '全部单词'
+            return (
+              <button
+                key={tab}
+                onClick={() => setBrowsing(tab === 'all')}
+                className='flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors'
+                style={
+                  active
+                    ? {
+                        background: '#FEFCF8',
+                        color: '#3A4A3C',
+                        boxShadow: '0 1px 4px rgba(80,110,85,0.10)',
+                      }
+                    : { background: 'transparent', color: '#8A9A8A' }
+                }
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab content */}
+        {browsing ? (
+          <BookBrowser
+            words={bookWords}
+            loading={bookWordsLoading}
+            error={bookWordsError}
+          />
+        ) : (
+          <ChapterList
+            chapters={chapters}
+            loading={chaptersLoading}
+            error={chaptersError}
+            bookTitle={book.title}
+            showHeader={false}
+            onBack={() => {
+              setBookId(null)
+              setBrowsing(false)
+            }}
+            onPick={(c) => setChapterId(c.id)}
+          />
+        )}
+      </div>
     )
   }
 

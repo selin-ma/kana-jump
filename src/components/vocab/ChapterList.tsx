@@ -5,6 +5,7 @@ interface Props {
   loading: boolean
   error: string | null
   bookTitle: string
+  showHeader?: boolean
   onBack: () => void
   onPick: (chapter: Chapter) => void
 }
@@ -14,23 +15,26 @@ export default function ChapterList({
   loading,
   error,
   bookTitle,
+  showHeader = true,
   onBack,
   onPick,
 }: Props) {
   return (
-    <div className='flex flex-col gap-4 w-full max-w-sm'>
-      <div className='flex items-center justify-between'>
-        <button
-          onClick={onBack}
-          className='text-xs transition-colors'
-          style={{ color: '#7A9E82' }}
-        >
-          ← 书架
-        </button>
-        <span className='text-sm font-medium' style={{ color: '#3A4A3C' }}>
-          {bookTitle}
-        </span>
-      </div>
+    <div className='flex flex-col gap-4 w-full'>
+      {showHeader && (
+        <div className='flex items-center justify-between'>
+          <button
+            onClick={onBack}
+            className='text-xs transition-colors'
+            style={{ color: '#7A9E82' }}
+          >
+            ← 书架
+          </button>
+          <span className='text-sm font-medium' style={{ color: '#3A4A3C' }}>
+            {bookTitle}
+          </span>
+        </div>
+      )}
 
       {loading && (
         <p className='text-sm' style={{ color: '#B8C4B8' }}>
