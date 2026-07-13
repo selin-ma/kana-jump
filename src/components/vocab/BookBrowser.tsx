@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { WordWithChapter } from '../../services/vocab'
 import AudioButton from './AudioButton/AudioButton'
+import VocabDetailModal from './VocabDetailModal'
 
 interface Props {
   words: WordWithChapter[]
@@ -11,6 +12,7 @@ interface Props {
 
 export default function BookBrowser({ words, loading, error }: Props) {
   const [query, setQuery] = useState('')
+  const [detailWord, setDetailWord] = useState<WordWithChapter | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
   const filtered = query.trim()
@@ -77,8 +79,6 @@ export default function BookBrowser({ words, loading, error }: Props) {
           >
             {virtualizer.getVirtualItems().map((vItem) => {
               const w = filtered[vItem.index]
-              const meaning =
-                w.meaning_zh.length > 14 ? w.meaning_zh.slice(0, 14) + '…' : w.meaning_zh
               return (
                 <div
                   key={vItem.key}
@@ -94,7 +94,8 @@ export default function BookBrowser({ words, loading, error }: Props) {
                   }}
                 >
                   <div
-                    className='flex items-center gap-2 px-3 py-2 rounded-xl'
+                    onClick={() => setDetailWord(w)}
+                    className='flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-colors hover:bg-leaf-bg'
                     style={{
                       background: '#FEFCF8',
                       border: '1px solid #E4E8E0',
@@ -107,25 +108,19 @@ export default function BookBrowser({ words, loading, error }: Props) {
                       {vItem.index + 1}
                     </span>
 
-                    <span
-                      className='text-sm font-medium shrink-0'
-                      style={{ color: '#3A4A3C' }}
-                    >
-                      {w.kana}
-                    </span>
-
-                    {w.kanji && (
-                      <span className='text-xs shrink-0' style={{ color: '#7A9E82' }}>
-                        {w.kanji}
+                    <div className='flex-1 min-w-0 truncate'>
+                      <span className='text-sm font-medium' style={{ color: '#3A4A3C' }}>
+                        {w.kana}
                       </span>
-                    )}
-
-                    <span
-                      className='text-xs flex-1 truncate'
-                      style={{ color: '#6A7A6A' }}
-                    >
-                      {meaning}
-                    </span>
+                      {w.kanji && (
+                        <span className='text-xs ml-2' style={{ color: '#7A9E82' }}>
+                          {w.kanji}
+                        </span>
+                      )}
+                      <span className='text-xs ml-2' style={{ color: '#6A7A6A' }}>
+                        {w.meaning_zh}
+                      </span>
+                    </div>
 
                     <span
                       className='text-xs px-2 py-0.5 rounded-full shrink-0'
@@ -146,6 +141,10 @@ export default function BookBrowser({ words, loading, error }: Props) {
           </div>
           <div style={{ height: '64px' }} />
         </>
+      )}
+
+      {detailWord && (
+        <VocabDetailModal word={detailWord} onClose={() => setDetailWord(null)} />
       )}
     </div>
   )
